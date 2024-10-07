@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, macos-latest]  # 在Ubuntu和macOS下都运行，确保跨平台兼容性
+        os: [ubuntu-latest, macos-latest]
 
     steps:
     # Step 1: 检出代码
@@ -33,14 +33,19 @@ jobs:
         brew update
         brew install cmake
 
-    # Step 3: 配置项目
+    # Step 3: 清理构建目录
+    - name: Clean build directory
+      run: |
+        rm -rf build
+
+    # Step 4: 配置项目
     - name: Configure Project with CMake
       run: cmake -S . -B build
 
-    # Step 4: 构建项目
+    # Step 5: 构建项目
     - name: Build Project
       run: cmake --build build
 
-    # Step 5: 运行测试
+    # Step 6: 运行测试
     - name: Run Tests
       run: ./build/temperature_control_system
