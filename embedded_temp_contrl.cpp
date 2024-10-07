@@ -2,6 +2,7 @@
 #include <cassert>
 #include <thread>  // 添加线程库的头文件
 #include <chrono>  // 添加时间库的头文件
+#include <vector>  // 添加vector用于数据记录
 
 // 模拟传感器和加热器的接口类
 class TemperatureSensor {
@@ -54,12 +55,23 @@ public:
         } else {
             assert(heater.getStatus() == false && "Heater should be OFF when current temperature is at or above target.");
         }
+
+        // 记录温度数据
+        temperatureHistory.push_back(currentTemperature);
+    }
+
+    void printTemperatureHistory() const {
+        std::cout << "Temperature History:" << std::endl;
+        for (float temp : temperatureHistory) {
+            std::cout << temp << " C" << std::endl;
+        }
     }
 
 private:
     float targetTemperature;
     Heater heater;
     TemperatureSensor sensor;
+    std::vector<float> temperatureHistory; // 记录温度的历史数据
 };
 
 int main() {
@@ -67,12 +79,13 @@ int main() {
     TemperatureControlSystem tempControlSystem(25.0);
 
     // 模拟系统运行的控制循环
-    while (true) {
+    for (int i = 0; i < 5; ++i) {  // 运行5次控制循环，模拟系统一段时间内的运行
         tempControlSystem.controlLoop();
-        // 为了方便演示，添加一个延迟并退出循环
         std::this_thread::sleep_for(std::chrono::seconds(1));
-        break;  // 这里用于简化演示，一次控制循环后退出
     }
+
+    // 打印温度历史数据
+    tempControlSystem.printTemperatureHistory();
 
     return 0;
 }
