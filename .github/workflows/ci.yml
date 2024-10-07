@@ -1,0 +1,39 @@
+name: C++ CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]  # 在Ubuntu和macOS下都运行，确保跨平台兼容性
+
+    steps:
+    # Step 1: 检出代码
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    # Step 2: 设置CMake构建环境
+    - name: Set up CMake
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake g++
+
+    # Step 3: 配置项目
+    - name: Configure Project with CMake
+      run: cmake -S . -B build
+
+    # Step 4: 构建项目
+    - name: Build Project
+      run: cmake --build build
+
+    # Step 5: 运行测试
+    - name: Run Tests
+      run: ./build/temperature_control_system

@@ -1,0 +1,4 @@
+mkdir build         # 创建构建目录
+cd build            # 进入构建目录
+cmake ..            # 运行CMake生成构建文件
+cmake --build .     # 编译项目

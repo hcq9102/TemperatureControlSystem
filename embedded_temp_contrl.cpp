@@ -1,5 +1,7 @@
 #include <iostream>
 #include <cassert>
+#include <thread>  // 添加线程库的头文件
+#include <chrono>  // 添加时间库的头文件
 
 // 模拟传感器和加热器的接口类
 class TemperatureSensor {
